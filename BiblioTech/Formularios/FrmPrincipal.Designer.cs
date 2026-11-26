@@ -141,7 +141,7 @@ namespace BiblioTech.Formularios
             btnModLibros.Name = "btnModLibros";
             btnModLibros.Size = new Size(150, 40);
             btnModLibros.TabIndex = 2;
-            btnModLibros.Text = "📘 Mód. 2: Libros";
+            btnModLibros.Text = "📘 Libros";
             btnModLibros.UseVisualStyleBackColor = false;
             btnModLibros.Click += BtnModLibros_Click;
             // 
@@ -157,7 +157,7 @@ namespace BiblioTech.Formularios
             btnModCatAut.Name = "btnModCatAut";
             btnModCatAut.Size = new Size(210, 40);
             btnModCatAut.TabIndex = 3;
-            btnModCatAut.Text = "📂 Mód. 2: Categorías/Autores";
+            btnModCatAut.Text = "📂 Categorías / Autores";
             btnModCatAut.UseVisualStyleBackColor = false;
             btnModCatAut.Click += BtnModCatAut_Click;
             // 
@@ -173,7 +173,7 @@ namespace BiblioTech.Formularios
             btnModLectores.Name = "btnModLectores";
             btnModLectores.Size = new Size(150, 40);
             btnModLectores.TabIndex = 4;
-            btnModLectores.Text = "🎓 Mód. 2: Lectores";
+            btnModLectores.Text = "🎓 Lectores";
             btnModLectores.UseVisualStyleBackColor = false;
             btnModLectores.Click += BtnModLectores_Click;
             // 
@@ -189,7 +189,7 @@ namespace BiblioTech.Formularios
             btnModPrestamos.Name = "btnModPrestamos";
             btnModPrestamos.Size = new Size(245, 40);
             btnModPrestamos.TabIndex = 5;
-            btnModPrestamos.Text = "🔄 Mód. 3: Préstamos y Devoluciones";
+            btnModPrestamos.Text = "🔄 Préstamos y Devoluciones";
             btnModPrestamos.UseVisualStyleBackColor = false;
             btnModPrestamos.Click += BtnModPrestamos_Click;
             // 
@@ -205,7 +205,7 @@ namespace BiblioTech.Formularios
             btnModAdmin.Name = "btnModAdmin";
             btnModAdmin.Size = new Size(190, 40);
             btnModAdmin.TabIndex = 6;
-            btnModAdmin.Text = "⚙️ Mód. 5: Administración";
+            btnModAdmin.Text = "⚙️ Administración";
             btnModAdmin.UseVisualStyleBackColor = false;
             btnModAdmin.Click += BtnModAdmin_Click;
             // 
@@ -442,7 +442,7 @@ namespace BiblioTech.Formularios
             tabCat.Padding = new Padding(15);
             tabCat.Size = new Size(1116, 416);
             tabCat.TabIndex = 0;
-            tabCat.Text = "🔎 Mód. 4: Consulta y Filtros del Catálogo de Libros";
+            tabCat.Text = "🔎 Consulta del Catálogo de Libros";
             // 
             // dgvConsultaLibros
             // 
@@ -553,7 +553,7 @@ namespace BiblioTech.Formularios
             tabHist.Padding = new Padding(15);
             tabHist.Size = new Size(1116, 416);
             tabHist.TabIndex = 1;
-            tabHist.Text = "📋 Mód. 4: Historial y Monitor de Préstamos";
+            tabHist.Text = "📋 Historial y Monitor de Préstamos";
             // 
             // dgvConsultaPrestamos
             // 

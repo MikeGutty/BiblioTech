@@ -3,10 +3,6 @@ using BiblioTech.Modelos;
 
 namespace BiblioTech.Formularios
 {
-    /// <summary>
-    /// MÓDULO 2 (Parte 1): Gestión de Catálogos Auxiliares.
-    /// Contiene el CRUD completo de Categorías y el CRUD completo de Autores en dos pestañas.
-    /// </summary>
     public partial class FrmCategoriasAutores : Form
     {
         private readonly CatalogoDatos _datos = new CatalogoDatos();
@@ -20,9 +16,7 @@ namespace BiblioTech.Formularios
             CargarAutores();
         }
 
-        // =====================================================================
-        // PESTAÑA 1: CATEGORÍAS
-        // =====================================================================
+        // Categorías
         private void CargarCategorias()
         {
             dgvCategorias.DataSource = null;
@@ -105,9 +99,7 @@ namespace BiblioTech.Formularios
             }
         }
 
-        // =====================================================================
-        // PESTAÑA 2: AUTORES
-        // =====================================================================
+        // Autores
         private void CargarAutores()
         {
             dgvAutores.DataSource = null;

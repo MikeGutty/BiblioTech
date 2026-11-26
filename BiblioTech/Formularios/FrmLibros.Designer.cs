@@ -340,7 +340,7 @@ namespace BiblioTech.Formularios
             MaximizeBox = false;
             Name = "FrmLibros";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Módulo 2 - Gestión del Catálogo de Libros";
+            Text = "Gestión del Catálogo de Libros";
             grpDatos.ResumeLayout(false);
             grpDatos.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numAnio).EndInit();

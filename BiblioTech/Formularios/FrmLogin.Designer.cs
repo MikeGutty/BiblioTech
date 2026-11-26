@@ -61,7 +61,7 @@ namespace BiblioTech.Formularios
             lblSubtitulo.Name = "lblSubtitulo";
             lblSubtitulo.Size = new Size(424, 43);
             lblSubtitulo.TabIndex = 1;
-            lblSubtitulo.Text = "Sistema de Gestión Bibliotecaria (POO + SQLite)";
+            lblSubtitulo.Text = "Sistema de Gestión Bibliotecaria";
             lblSubtitulo.TextAlign = ContentAlignment.TopCenter;
             // 
             // lblTitulo
@@ -154,7 +154,7 @@ namespace BiblioTech.Formularios
             lblAyuda.Name = "lblAyuda";
             lblAyuda.Size = new Size(320, 55);
             lblAyuda.TabIndex = 7;
-            lblAyuda.Text = "💡 Cuentas de prueba para clase:\r\n• Administrador: admin / 1234\r\n• Bibliotecario: biblio / 1234";
+            lblAyuda.Text = "Accesos de prueba:\r\n• Administrador: admin / 1234\r\n• Bibliotecario: biblio / 1234";
             // 
             // FrmLogin
             // 

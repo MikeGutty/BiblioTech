@@ -1,9 +1,5 @@
 namespace BiblioTech.Modelos
 {
-    /// <summary>
-    /// Representa un Libro dentro del catálogo de la biblioteca.
-    /// Se relaciona con un Autor (IdAutor) y una Categoría (IdCategoria).
-    /// </summary>
     public class Libro
     {
         public int Id { get; set; }
@@ -21,9 +17,6 @@ namespace BiblioTech.Modelos
         {
         }
 
-        /// <summary>
-        /// Método encapsulado que indica si hay al menos un ejemplar disponible para prestar.
-        /// </summary>
         public bool TieneEjemplaresDisponibles()
         {
             return StockDisponible > 0;

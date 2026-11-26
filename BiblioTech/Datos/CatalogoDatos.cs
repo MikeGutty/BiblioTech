@@ -3,15 +3,9 @@ using MySqlConnector;
 
 namespace BiblioTech.Datos
 {
-    /// <summary>
-    /// Acceso a datos para el Módulo 2: Gestión de Catálogos (CRUDs de Categorías, Autores, Libros y Lectores) en MySQL.
-    /// Escrito con consultas SQL claras para que los estudiantes comprendan cómo se relacionan las tablas.
-    /// </summary>
     public class CatalogoDatos
     {
-        // =========================================================================
-        // 1. CRUD DE CATEGORÍAS
-        // =========================================================================
+        // Categorías
         public List<Categoria> ListarCategorias()
         {
             List<Categoria> lista = new List<Categoria>();
@@ -79,9 +73,7 @@ namespace BiblioTech.Datos
             cmd.ExecuteNonQuery();
         }
 
-        // =========================================================================
-        // 2. CRUD DE AUTORES
-        // =========================================================================
+        // Autores
         public List<Autor> ListarAutores()
         {
             List<Autor> lista = new List<Autor>();
@@ -148,9 +140,7 @@ namespace BiblioTech.Datos
             cmd.ExecuteNonQuery();
         }
 
-        // =========================================================================
-        // 3. CRUD DE LIBROS (Con INNER JOIN a Autores y Categorías)
-        // =========================================================================
+        // Libros
         public List<Libro> ListarLibros(string filtroTexto = "", int idCategoria = 0, int idAutor = 0)
         {
             List<Libro> lista = new List<Libro>();
@@ -263,9 +253,7 @@ namespace BiblioTech.Datos
             cmd.ExecuteNonQuery();
         }
 
-        // =========================================================================
-        // 4. CRUD DE LECTORES (Estudiantes y Docentes)
-        // =========================================================================
+        // Lectores
         public List<Lector> ListarLectores(string filtroTexto = "", bool soloActivos = false)
         {
             List<Lector> lista = new List<Lector>();

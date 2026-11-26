@@ -2,11 +2,10 @@ using MySqlConnector;
 
 namespace BiblioTech.Datos
 {
-    /// Clase encargada de gestionar la conexión a la base de datos MySQL (bibliotech).
-    /// Si la base de datos o las tablas no existen, las crea automáticamente e inserta datos de ejemplo.
+    // Gestiona la conexión a MySQL y la creación inicial de tablas
     public static class ConexionBD
     {
-        // Parámetros de conexión a MySQL en la nube (Aiven)
+        // Parámetros de conexión al servidor MySQL
         public static string Servidor { get; set; } = "mysql-15b9c7e7-lanselot777hailander-1948.e.aivencloud.com";
         public static string Puerto { get; set; } = "18260";
         public static string BaseDatos { get; set; } = "bibliotech";
@@ -40,16 +39,15 @@ namespace BiblioTech.Datos
         private static string CadenaConexion =>
             $"Server={Servidor};Port={Puerto};Database={BaseDatos};User ID={Usuario};Password={Contrasena};SslMode=Required;AllowUserVariables=True;";
 
-        /// Devuelve una nueva conexión a MySQL lista para abrirse con connection.Open().
         public static MySqlConnection ObtenerConexion()
         {
             return new MySqlConnection(CadenaConexion);
         }
 
-        /// Se llama al iniciar el programa (en Program.cs) para asegurar que la base de datos y las tablas existan en MySQL.
+        // Verifica que la base de datos y las tablas existan al iniciar la aplicación
         public static void InicializarBaseDeDatos()
         {
-            // 1. Nos conectamos al servidor MySQL para crear la base de datos si aún no existe
+            // Crear la base de datos si no existe
             using (MySqlConnection conexionServidor = new MySqlConnection(CadenaConexionServidor))
             {
                 conexionServidor.Open();
@@ -58,7 +56,7 @@ namespace BiblioTech.Datos
                 cmdCrearBD.ExecuteNonQuery();
             }
 
-            // 2. Nos conectamos a la base de datos bibliotech y creamos las tablas si no existen
+            // Conectar a la base de datos y crear las tablas
             using MySqlConnection conexion = ObtenerConexion();
             conexion.Open();
 
@@ -138,18 +136,18 @@ namespace BiblioTech.Datos
                 cmdTablas.ExecuteNonQuery();
             }
 
-            // 3. Verificamos si ya existen usuarios; si no hay ninguno, insertamos los datos semilla (Seed Data)
+            // Si la tabla de usuarios está vacía, cargamos los registros de prueba
             using MySqlCommand cmdContar = new MySqlCommand("SELECT COUNT(*) FROM Usuarios;", conexion);
             long totalUsuarios = Convert.ToInt64(cmdContar.ExecuteScalar() ?? 0L);
 
             if (totalUsuarios == 0)
             {
-                InsertarDatosSemilla(conexion);
+                InsertarDatosIniciales(conexion);
             }
         }
 
-        /// Inserta datos iniciales para que los alumnos puedan probar todos los módulos desde el primer momento.
-        private static void InsertarDatosSemilla(MySqlConnection conexion)
+        // Carga datos iniciales de prueba
+        private static void InsertarDatosIniciales(MySqlConnection conexion)
         {
             string fechaHoy = DateTime.Today.ToString("yyyy-MM-dd");
             string fechaMas7Dias = DateTime.Today.AddDays(7).ToString("yyyy-MM-dd");

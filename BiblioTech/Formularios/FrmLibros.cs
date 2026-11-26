@@ -3,10 +3,6 @@ using BiblioTech.Modelos;
 
 namespace BiblioTech.Formularios
 {
-    /// <summary>
-    /// MÓDULO 2 (Parte 2): Gestión del Catálogo de Libros (CRUD completo).
-    /// Relaciona cada Libro con su Autor y su Categoría usando ComboBox cargados con objetos.
-    /// </summary>
     public partial class FrmLibros : Form
     {
         private readonly CatalogoDatos _datos = new CatalogoDatos();

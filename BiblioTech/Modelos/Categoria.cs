@@ -1,8 +1,5 @@
 namespace BiblioTech.Modelos
 {
-    /// <summary>
-    /// Representa una Categoría o Género literario/académico (Ej: Programación, Matemáticas, Novela).
-    /// </summary>
     public class Categoria
     {
         public int Id { get; set; }

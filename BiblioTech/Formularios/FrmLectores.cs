@@ -3,10 +3,6 @@ using BiblioTech.Modelos;
 
 namespace BiblioTech.Formularios
 {
-    /// <summary>
-    /// MÓDULO 2 (Parte 3): Gestión de Lectores / Socios (Estudiantes y Docentes).
-    /// Muestra en acción la clase Lector que hereda de Persona.
-    /// </summary>
     public partial class FrmLectores : Form
     {
         private readonly CatalogoDatos _datos = new CatalogoDatos();
@@ -84,7 +80,7 @@ namespace BiblioTech.Formularios
                 if (_idLectorSeleccionado == 0)
                 {
                     _datos.InsertarLector(lector);
-                    MessageBox.Show($"Lector registrado correctamente.\n\nResumen POO: {lector.ObtenerResumen()}\nLímite de libros permitidos: {lector.ObtenerLimiteLibros()}",
+                    MessageBox.Show($"Lector registrado correctamente.\n\n{lector.ObtenerResumen()}\nLímite de libros permitidos: {lector.ObtenerLimiteLibros()}",
                         "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else

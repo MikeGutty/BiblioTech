@@ -27,11 +27,6 @@ bld/
 # Visual Studio 2015/2017/2019/2022 cache/options directory
 .vs/
 
-# Local SQLite database leftover
-*.db
-*.db-shm
-*.db-wal
-
-# Secretos locales de conexión a base de datos
+# Credenciales locales de base de datos
 db.secret.txt
 

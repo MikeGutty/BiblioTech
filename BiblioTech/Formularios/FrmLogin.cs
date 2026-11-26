@@ -3,10 +3,6 @@ using BiblioTech.Modelos;
 
 namespace BiblioTech.Formularios
 {
-    /// <summary>
-    /// MÓDULO 1: Seguridad y Acceso (Autenticación).
-    /// Permite iniciar sesión validando usuario y contraseña contra SQLite.
-    /// </summary>
     public partial class FrmLogin : Form
     {
         private readonly UsuarioDatos _usuarioDatos = new UsuarioDatos();

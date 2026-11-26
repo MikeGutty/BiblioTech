@@ -3,7 +3,6 @@ using MySqlConnector;
 
 namespace BiblioTech.Datos
 {
-    /// Acceso a datos para la tabla Configuracion (Módulo 5: Administración) en MySQL.
     public class ConfiguracionDatos
     {
         public ConfiguracionSistema ObtenerConfiguracion()

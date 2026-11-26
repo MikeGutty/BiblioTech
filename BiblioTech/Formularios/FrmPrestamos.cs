@@ -3,11 +3,6 @@ using BiblioTech.Modelos;
 
 namespace BiblioTech.Formularios
 {
-    /// <summary>
-    /// MÓDULO 3: Proceso Central (Préstamos y Devoluciones).
-    /// Permite entregar libros a los lectores (descontando stock) y recibir devoluciones
-    /// calculando automáticamente los días de retraso y la multa correspondiente.
-    /// </summary>
     public partial class FrmPrestamos : Form
     {
         private readonly CatalogoDatos _catalogoDatos = new CatalogoDatos();
@@ -32,10 +27,9 @@ namespace BiblioTech.Formularios
 
         private void CargarCombos()
         {
-            // Solo lectores activos
             cboLector.DataSource = _catalogoDatos.ListarLectores("", soloActivos: true);
 
-            // Solo libros que tienen al menos 1 ejemplar disponible (usando el método POO TieneEjemplaresDisponibles)
+            // Solo libros con stock disponible
             List<Libro> librosDisponibles = _catalogoDatos.ListarLibros()
                 .Where(l => l.TieneEjemplaresDisponibles())
                 .ToList();

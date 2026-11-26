@@ -1,8 +1,5 @@
 namespace BiblioTech.Modelos
 {
-    /// <summary>
-    /// Representa al Autor de uno o varios libros del catálogo.
-    /// </summary>
     public class Autor
     {
         public int Id { get; set; }

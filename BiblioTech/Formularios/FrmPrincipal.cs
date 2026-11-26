@@ -3,10 +3,6 @@ using BiblioTech.Modelos;
 
 namespace BiblioTech.Formularios
 {
-    /// <summary>
-    /// FORMULARIO PRINCIPAL + MÓDULO 4: Consultas, Filtros y Panel de Control (Dashboard).
-    /// Sirve como menú contenedor hacia todos los módulos y restringe el Módulo 5 si el usuario no es Administrador.
-    /// </summary>
     public partial class FrmPrincipal : Form
     {
         private readonly CatalogoDatos _catalogoDatos = new CatalogoDatos();
@@ -33,12 +29,12 @@ namespace BiblioTech.Formularios
                 Text = $"BiblioTech - Panel Principal [{usuario.ObtenerResumen()}]";
                 lblUsuarioActivo.Text = $"👤 {usuario.NombreCompleto} ({usuario.Rol})";
 
-                // Restricción de seguridad por Rol (Módulo 1 + Módulo 5)
+                // Restricción de acceso por rol
                 btnModAdmin.Enabled = usuario.EsAdministrador();
                 if (!usuario.EsAdministrador())
                 {
                     btnModAdmin.BackColor = Color.FromArgb(100, 110, 120);
-                    btnModAdmin.Text = "🔒 Mód. 5: Solo Admin";
+                    btnModAdmin.Text = "🔒 Solo Admin";
                 }
             }
         }
@@ -108,9 +104,6 @@ namespace BiblioTech.Formularios
             ActualizarPanelYConsultas();
         }
 
-        // =====================================================================
-        // EVENTOS DE BOTONES Y CONTROLES DEL DISEÑADOR
-        // =====================================================================
         private void BtnModLibros_Click(object? sender, EventArgs e)
         {
             AbrirFormularioModal(new FrmLibros());

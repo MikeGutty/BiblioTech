@@ -113,7 +113,7 @@ namespace BiblioTech.Formularios
             grpUsuario.Size = new Size(855, 195);
             grpUsuario.TabIndex = 0;
             grpUsuario.TabStop = false;
-            grpUsuario.Text = "Datos de la Cuenta (UsuarioSistema hereda de Persona)";
+            grpUsuario.Text = "Datos de la Cuenta";
             // 
             // lblNombre
             // 
@@ -403,7 +403,7 @@ namespace BiblioTech.Formularios
             MaximizeBox = false;
             Name = "FrmAdministracion";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Módulo 5 - Administración del Sistema (Solo Administrador)";
+            Text = "Administración del Sistema";
             tabControl.ResumeLayout(false);
             tabUsuarios.ResumeLayout(false);
             grpUsuario.ResumeLayout(false);

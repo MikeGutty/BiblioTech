@@ -73,7 +73,7 @@ namespace BiblioTech.Formularios
             grpDatos.Size = new Size(865, 185);
             grpDatos.TabIndex = 0;
             grpDatos.TabStop = false;
-            grpDatos.Text = "🎓 Datos del Lector / Socio (Hereda de la clase Persona)";
+            grpDatos.Text = "🎓 Datos del Lector";
             // 
             // lblNombre
             // 
@@ -278,7 +278,7 @@ namespace BiblioTech.Formularios
             MaximizeBox = false;
             Name = "FrmLectores";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Módulo 2 - Gestión de Lectores (Estudiantes y Docentes)";
+            Text = "Gestión de Lectores";
             grpDatos.ResumeLayout(false);
             grpDatos.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvLectores).EndInit();

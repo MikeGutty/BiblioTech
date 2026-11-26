@@ -3,11 +3,6 @@ using BiblioTech.Modelos;
 
 namespace BiblioTech.Formularios
 {
-    /// <summary>
-    /// MÓDULO 5: Administración (Solo accesible para el rol Administrador).
-    /// Pestaña 1: Gestión de Usuarios del Sistema y Roles (Administrador / Bibliotecario).
-    /// Pestaña 2: Configuración de Reglas de la Biblioteca (Días máximos de préstamo y Multa por día).
-    /// </summary>
     public partial class FrmAdministracion : Form
     {
         private readonly UsuarioDatos _usuarioDatos = new UsuarioDatos();
@@ -21,9 +16,7 @@ namespace BiblioTech.Formularios
             CargarConfiguracion();
         }
 
-        // =====================================================================
-        // PESTAÑA 1: USUARIOS DEL SISTEMA
-        // =====================================================================
+        // Usuarios del sistema
         private void CargarUsuarios()
         {
             dgvUsuarios.DataSource = null;
@@ -107,9 +100,7 @@ namespace BiblioTech.Formularios
             }
         }
 
-        // =====================================================================
-        // PESTAÑA 2: REGLAS Y PARÁMETROS DE LA BIBLIOTECA
-        // =====================================================================
+        // Parámetros de la biblioteca
         private void CargarConfiguracion()
         {
             ConfiguracionSistema config = _configDatos.ObtenerConfiguracion();

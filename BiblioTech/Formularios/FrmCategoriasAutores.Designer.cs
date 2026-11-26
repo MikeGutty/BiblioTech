@@ -341,7 +341,7 @@ namespace BiblioTech.Formularios
             MaximizeBox = false;
             Name = "FrmCategoriasAutores";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Módulo 2 - Gestión de Categorías y Autores";
+            Text = "Gestión de Categorías y Autores";
             tabControl.ResumeLayout(false);
             tabCategorias.ResumeLayout(false);
             grpDatosCat.ResumeLayout(false);

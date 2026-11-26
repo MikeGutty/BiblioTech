@@ -3,15 +3,8 @@ using MySqlConnector;
 
 namespace BiblioTech.Datos
 {
-    /// <summary>
-    /// Acceso a datos para el Módulo 3 (Préstamos y Devoluciones) y Módulo 4 (Consultas y Panel de Control) en MySQL.
-    /// Incluye transacciones para actualizar el stock del libro junto con el préstamo.
-    /// </summary>
     public class PrestamoDatos
     {
-        /// <summary>
-        /// Lista los préstamos aplicando filtros opcionales por texto y por estado ("Todos", "Activos", "Devueltos", "Vencidos").
-        /// </summary>
         public List<Prestamo> ListarPrestamos(string filtroTexto = "", string filtroEstado = "Todos")
         {
             List<Prestamo> lista = new List<Prestamo>();
@@ -59,7 +52,7 @@ namespace BiblioTech.Datos
                     Observaciones = reader.GetString(14)
                 };
 
-                // Filtrado en memoria usando los métodos orientados a objetos de la clase Prestamo
+                // Filtrado por estado
                 if (filtroEstado == "Activos" && p.Estado != "Activo")
                     continue;
                 if (filtroEstado == "Devueltos" && p.Estado != "Devuelto")
@@ -73,9 +66,6 @@ namespace BiblioTech.Datos
             return lista;
         }
 
-        /// <summary>
-        /// Cuenta cuántos préstamos activos tiene actualmente un lector (para validar su límite según sea Estudiante o Docente).
-        /// </summary>
         public int ContarPrestamosActivosPorLector(int idLector)
         {
             using MySqlConnection conexion = ConexionBD.ObtenerConexion();
@@ -87,9 +77,7 @@ namespace BiblioTech.Datos
             return Convert.ToInt32(cmd.ExecuteScalar() ?? 0);
         }
 
-        /// <summary>
-        /// Registra un nuevo préstamo y descuenta en 1 el StockDisponible del libro.
-        /// </summary>
+        // Registra el préstamo y descuenta el stock del libro dentro de una misma transacción
         public void RegistrarPrestamo(Prestamo nuevoPrestamo)
         {
             using MySqlConnection conexion = ConexionBD.ObtenerConexion();
@@ -98,7 +86,7 @@ namespace BiblioTech.Datos
 
             try
             {
-                // 1. Verificamos que el libro tenga stock disponible
+                // Verificar stock disponible
                 string sqlStock = "SELECT StockDisponible FROM Libros WHERE Id = @idLibro;";
                 using (MySqlCommand cmdStock = new MySqlCommand(sqlStock, conexion, transaccion))
                 {
@@ -110,7 +98,7 @@ namespace BiblioTech.Datos
                     }
                 }
 
-                // 2. Insertamos el préstamo
+                // Insertar el préstamo
                 string sqlInsert = @"
                     INSERT INTO Prestamos (IdLibro, IdLector, IdUsuarioRegistro, FechaPrestamo, FechaDevolucionEsperada, FechaDevolucionReal, Estado, MultaPagada, Observaciones)
                     VALUES (@idLibro, @idLector, @idUsuario, @fechaPrestamo, @fechaEsperada, NULL, 'Activo', 0, @obs);";
@@ -126,7 +114,7 @@ namespace BiblioTech.Datos
                     cmdInsert.ExecuteNonQuery();
                 }
 
-                // 3. Restamos 1 al stock disponible del libro
+                // Descontar 1 al stock disponible
                 string sqlUpdateLibro = "UPDATE Libros SET StockDisponible = StockDisponible - 1 WHERE Id = @idLibro;";
                 using (MySqlCommand cmdUpdate = new MySqlCommand(sqlUpdateLibro, conexion, transaccion))
                 {
@@ -143,10 +131,7 @@ namespace BiblioTech.Datos
             }
         }
 
-        /// <summary>
-        /// Registra la devolución de un préstamo activo, guarda la multa cobrada (si hubo retraso)
-        /// e incrementa en 1 el StockDisponible del libro.
-        /// </summary>
+        // Registra la devolución y repone el stock del ejemplar
         public void RegistrarDevolucion(int idPrestamo, int idLibro, decimal multaPagada, string observaciones)
         {
             using MySqlConnection conexion = ConexionBD.ObtenerConexion();
@@ -198,9 +183,6 @@ namespace BiblioTech.Datos
             }
         }
 
-        /// <summary>
-        /// Obtiene los indicadores resumidos para las tarjetas del Panel de Control (Módulo 4).
-        /// </summary>
         public (int TotalTitulos, int EjemplaresDisponibles, int PrestamosActivos, int PrestamosVencidos) ObtenerIndicadoresDashboard()
         {
             using MySqlConnection conexion = ConexionBD.ObtenerConexion();

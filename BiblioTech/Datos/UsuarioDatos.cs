@@ -3,12 +3,8 @@ using MySqlConnector;
 
 namespace BiblioTech.Datos
 {
-    /// Acceso a datos para Usuarios del Sistema (Módulo 1: Login y Módulo 5: Administración de Usuarios) en MySQL.
-    /// Muestra cómo convertir registros de MySQL en objetos de la clase UsuarioSistema (que hereda de Persona).
     public class UsuarioDatos
     {
-        /// Valida las credenciales en la base de datos. Si son correctas y el usuario está activo,
-        /// devuelve el objeto UsuarioSistema; de lo contrario, devuelve null.
         public UsuarioSistema? Autenticar(string nombreUsuario, string contrasena)
         {
             using MySqlConnection conexion = ConexionBD.ObtenerConexion();
@@ -32,7 +28,6 @@ namespace BiblioTech.Datos
             return null;
         }
 
-        /// Obtiene la lista completa de usuarios registrados en el sistema.
         public List<UsuarioSistema> ListarTodos()
         {
             List<UsuarioSistema> lista = new List<UsuarioSistema>();

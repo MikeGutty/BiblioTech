@@ -329,7 +329,7 @@ namespace BiblioTech.Formularios
             MaximizeBox = false;
             Name = "FrmPrestamos";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Módulo 3 - Proceso Central: Préstamos y Devoluciones";
+            Text = "Préstamos y Devoluciones";
             grpNuevo.ResumeLayout(false);
             grpNuevo.PerformLayout();
             grpDevolucion.ResumeLayout(false);

@@ -1,10 +1,6 @@
 namespace BiblioTech.Modelos
 {
-    /// <summary>
-    /// CLASE HIJA: UsuarioSistema
-    /// HERENCIA: Hereda de la clase Persona (con ": Persona") todos sus atributos
-    /// (Id, NombreCompleto, Documento, Email) y agrega atributos propios del login.
-    /// </summary>
+    // Hereda de Persona los datos básicos y agrega credenciales de acceso
     public class UsuarioSistema : Persona
     {
         public string NombreUsuario { get; set; } = string.Empty;
@@ -16,7 +12,6 @@ namespace BiblioTech.Modelos
         {
         }
 
-        // Llamada al constructor de la clase padre usando ": base(...)"
         public UsuarioSistema(int id, string nombreCompleto, string documento, string email,
                               string nombreUsuario, string contrasena, string rol, bool activo)
             : base(id, nombreCompleto, documento, email)
@@ -27,13 +22,11 @@ namespace BiblioTech.Modelos
             Activo = activo;
         }
 
-        // Método propio de negocio
         public bool EsAdministrador()
         {
             return Rol.Equals("Administrador", StringComparison.OrdinalIgnoreCase);
         }
 
-        // POLIMORFISMO: Sobrescribimos (override) el método de la clase padre Persona
         public override string ObtenerResumen()
         {
             return $"[Usuario: {NombreUsuario} | Rol: {Rol}] {NombreCompleto}";

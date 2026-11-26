@@ -1,8 +1,6 @@
 namespace BiblioTech.Modelos
 {
-    /// <summary>
-    /// Guarda los parámetros configurables por el Administrador en el Módulo 5.
-    /// </summary>
+    // Parámetros generales de la biblioteca
     public class ConfiguracionSistema
     {
         public string NombreBiblioteca { get; set; } = "BiblioTech Universitaria";
@@ -10,10 +8,7 @@ namespace BiblioTech.Modelos
         public decimal MultaPorDiaRetraso { get; set; } = 5.00m;
     }
 
-    /// <summary>
-    /// Clase estática para mantener en memoria al usuario que inició sesión actualmente
-    /// y la configuración global de la biblioteca.
-    /// </summary>
+    // Mantiene en memoria los datos de la sesión activa
     public static class SesionActual
     {
         public static UsuarioSistema? Usuario { get; set; }
