@@ -1,5 +1,5 @@
+using System.Data.Common;
 using BiblioTech.Modelos;
-using MySqlConnector;
 
 namespace BiblioTech.Datos
 {
@@ -9,12 +9,12 @@ namespace BiblioTech.Datos
         public List<Categoria> ListarCategorias()
         {
             List<Categoria> lista = new List<Categoria>();
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = "SELECT Id, Nombre, Descripcion FROM Categorias ORDER BY Nombre;";
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            using MySqlDataReader reader = cmd.ExecuteReader();
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            using DbDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
@@ -29,38 +29,38 @@ namespace BiblioTech.Datos
 
         public void InsertarCategoria(Categoria cat)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = "INSERT INTO Categorias (Nombre, Descripcion) VALUES (@nombre, @descripcion);";
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@nombre", cat.Nombre.Trim());
-            cmd.Parameters.AddWithValue("@descripcion", cat.Descripcion.Trim());
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@nombre", cat.Nombre.Trim());
+            ConexionBD.AgregarParametro(cmd, "@descripcion", cat.Descripcion.Trim());
             cmd.ExecuteNonQuery();
         }
 
         public void ActualizarCategoria(Categoria cat)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = "UPDATE Categorias SET Nombre = @nombre, Descripcion = @descripcion WHERE Id = @id;";
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@nombre", cat.Nombre.Trim());
-            cmd.Parameters.AddWithValue("@descripcion", cat.Descripcion.Trim());
-            cmd.Parameters.AddWithValue("@id", cat.Id);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@nombre", cat.Nombre.Trim());
+            ConexionBD.AgregarParametro(cmd, "@descripcion", cat.Descripcion.Trim());
+            ConexionBD.AgregarParametro(cmd, "@id", cat.Id);
             cmd.ExecuteNonQuery();
         }
 
         public void EliminarCategoria(int idCategoria)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             // Validamos que no tenga libros asociados antes de eliminar
-            using (MySqlCommand cmdValidar = new MySqlCommand("SELECT COUNT(*) FROM Libros WHERE IdCategoria = @id;", conexion))
+            using (DbCommand cmdValidar = ConexionBD.CrearComando("SELECT COUNT(*) FROM Libros WHERE IdCategoria = @id;", conexion))
             {
-                cmdValidar.Parameters.AddWithValue("@id", idCategoria);
+                ConexionBD.AgregarParametro(cmdValidar, "@id", idCategoria);
                 long cantidadLibros = Convert.ToInt64(cmdValidar.ExecuteScalar() ?? 0L);
                 if (cantidadLibros > 0)
                 {
@@ -68,8 +68,8 @@ namespace BiblioTech.Datos
                 }
             }
 
-            using MySqlCommand cmd = new MySqlCommand("DELETE FROM Categorias WHERE Id = @id;", conexion);
-            cmd.Parameters.AddWithValue("@id", idCategoria);
+            using DbCommand cmd = ConexionBD.CrearComando("DELETE FROM Categorias WHERE Id = @id;", conexion);
+            ConexionBD.AgregarParametro(cmd, "@id", idCategoria);
             cmd.ExecuteNonQuery();
         }
 
@@ -77,12 +77,12 @@ namespace BiblioTech.Datos
         public List<Autor> ListarAutores()
         {
             List<Autor> lista = new List<Autor>();
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = "SELECT Id, NombreCompleto, Nacionalidad FROM Autores ORDER BY NombreCompleto;";
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            using MySqlDataReader reader = cmd.ExecuteReader();
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            using DbDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
@@ -97,37 +97,37 @@ namespace BiblioTech.Datos
 
         public void InsertarAutor(Autor autor)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = "INSERT INTO Autores (NombreCompleto, Nacionalidad) VALUES (@nombre, @nacionalidad);";
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@nombre", autor.NombreCompleto.Trim());
-            cmd.Parameters.AddWithValue("@nacionalidad", autor.Nacionalidad.Trim());
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@nombre", autor.NombreCompleto.Trim());
+            ConexionBD.AgregarParametro(cmd, "@nacionalidad", autor.Nacionalidad.Trim());
             cmd.ExecuteNonQuery();
         }
 
         public void ActualizarAutor(Autor autor)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = "UPDATE Autores SET NombreCompleto = @nombre, Nacionalidad = @nacionalidad WHERE Id = @id;";
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@nombre", autor.NombreCompleto.Trim());
-            cmd.Parameters.AddWithValue("@nacionalidad", autor.Nacionalidad.Trim());
-            cmd.Parameters.AddWithValue("@id", autor.Id);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@nombre", autor.NombreCompleto.Trim());
+            ConexionBD.AgregarParametro(cmd, "@nacionalidad", autor.Nacionalidad.Trim());
+            ConexionBD.AgregarParametro(cmd, "@id", autor.Id);
             cmd.ExecuteNonQuery();
         }
 
         public void EliminarAutor(int idAutor)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
-            using (MySqlCommand cmdValidar = new MySqlCommand("SELECT COUNT(*) FROM Libros WHERE IdAutor = @id;", conexion))
+            using (DbCommand cmdValidar = ConexionBD.CrearComando("SELECT COUNT(*) FROM Libros WHERE IdAutor = @id;", conexion))
             {
-                cmdValidar.Parameters.AddWithValue("@id", idAutor);
+                ConexionBD.AgregarParametro(cmdValidar, "@id", idAutor);
                 long cantidadLibros = Convert.ToInt64(cmdValidar.ExecuteScalar() ?? 0L);
                 if (cantidadLibros > 0)
                 {
@@ -135,8 +135,8 @@ namespace BiblioTech.Datos
                 }
             }
 
-            using MySqlCommand cmd = new MySqlCommand("DELETE FROM Autores WHERE Id = @id;", conexion);
-            cmd.Parameters.AddWithValue("@id", idAutor);
+            using DbCommand cmd = ConexionBD.CrearComando("DELETE FROM Autores WHERE Id = @id;", conexion);
+            ConexionBD.AgregarParametro(cmd, "@id", idAutor);
             cmd.ExecuteNonQuery();
         }
 
@@ -144,7 +144,7 @@ namespace BiblioTech.Datos
         public List<Libro> ListarLibros(string filtroTexto = "", int idCategoria = 0, int idAutor = 0)
         {
             List<Libro> lista = new List<Libro>();
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = @"
@@ -159,12 +159,12 @@ namespace BiblioTech.Datos
                   AND (@idAut = 0 OR L.IdAutor = @idAut)
                 ORDER BY L.Titulo;";
 
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@texto", filtroTexto.Trim());
-            cmd.Parameters.AddWithValue("@idCat", idCategoria);
-            cmd.Parameters.AddWithValue("@idAut", idAutor);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@texto", filtroTexto.Trim());
+            ConexionBD.AgregarParametro(cmd, "@idCat", idCategoria);
+            ConexionBD.AgregarParametro(cmd, "@idAut", idAutor);
 
-            using MySqlDataReader reader = cmd.ExecuteReader();
+            using DbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 Libro libro = new Libro
@@ -187,27 +187,27 @@ namespace BiblioTech.Datos
 
         public void InsertarLibro(Libro libro)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = @"
                 INSERT INTO Libros (ISBN, Titulo, IdAutor, IdCategoria, AnioPublicacion, StockTotal, StockDisponible)
                 VALUES (@isbn, @titulo, @idAutor, @idCategoria, @anio, @stockTotal, @stockDisponible);";
 
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@isbn", libro.ISBN.Trim());
-            cmd.Parameters.AddWithValue("@titulo", libro.Titulo.Trim());
-            cmd.Parameters.AddWithValue("@idAutor", libro.IdAutor);
-            cmd.Parameters.AddWithValue("@idCategoria", libro.IdCategoria);
-            cmd.Parameters.AddWithValue("@anio", libro.AnioPublicacion);
-            cmd.Parameters.AddWithValue("@stockTotal", libro.StockTotal);
-            cmd.Parameters.AddWithValue("@stockDisponible", libro.StockDisponible);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@isbn", libro.ISBN.Trim());
+            ConexionBD.AgregarParametro(cmd, "@titulo", libro.Titulo.Trim());
+            ConexionBD.AgregarParametro(cmd, "@idAutor", libro.IdAutor);
+            ConexionBD.AgregarParametro(cmd, "@idCategoria", libro.IdCategoria);
+            ConexionBD.AgregarParametro(cmd, "@anio", libro.AnioPublicacion);
+            ConexionBD.AgregarParametro(cmd, "@stockTotal", libro.StockTotal);
+            ConexionBD.AgregarParametro(cmd, "@stockDisponible", libro.StockDisponible);
             cmd.ExecuteNonQuery();
         }
 
         public void ActualizarLibro(Libro libro)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = @"
@@ -221,26 +221,26 @@ namespace BiblioTech.Datos
                     StockDisponible = @stockDisponible
                 WHERE Id = @id;";
 
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@isbn", libro.ISBN.Trim());
-            cmd.Parameters.AddWithValue("@titulo", libro.Titulo.Trim());
-            cmd.Parameters.AddWithValue("@idAutor", libro.IdAutor);
-            cmd.Parameters.AddWithValue("@idCategoria", libro.IdCategoria);
-            cmd.Parameters.AddWithValue("@anio", libro.AnioPublicacion);
-            cmd.Parameters.AddWithValue("@stockTotal", libro.StockTotal);
-            cmd.Parameters.AddWithValue("@stockDisponible", libro.StockDisponible);
-            cmd.Parameters.AddWithValue("@id", libro.Id);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@isbn", libro.ISBN.Trim());
+            ConexionBD.AgregarParametro(cmd, "@titulo", libro.Titulo.Trim());
+            ConexionBD.AgregarParametro(cmd, "@idAutor", libro.IdAutor);
+            ConexionBD.AgregarParametro(cmd, "@idCategoria", libro.IdCategoria);
+            ConexionBD.AgregarParametro(cmd, "@anio", libro.AnioPublicacion);
+            ConexionBD.AgregarParametro(cmd, "@stockTotal", libro.StockTotal);
+            ConexionBD.AgregarParametro(cmd, "@stockDisponible", libro.StockDisponible);
+            ConexionBD.AgregarParametro(cmd, "@id", libro.Id);
             cmd.ExecuteNonQuery();
         }
 
         public void EliminarLibro(int idLibro)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
-            using (MySqlCommand cmdValidar = new MySqlCommand("SELECT COUNT(*) FROM Prestamos WHERE IdLibro = @id;", conexion))
+            using (DbCommand cmdValidar = ConexionBD.CrearComando("SELECT COUNT(*) FROM Prestamos WHERE IdLibro = @id;", conexion))
             {
-                cmdValidar.Parameters.AddWithValue("@id", idLibro);
+                ConexionBD.AgregarParametro(cmdValidar, "@id", idLibro);
                 long prestamosAsociados = Convert.ToInt64(cmdValidar.ExecuteScalar() ?? 0L);
                 if (prestamosAsociados > 0)
                 {
@@ -248,8 +248,8 @@ namespace BiblioTech.Datos
                 }
             }
 
-            using MySqlCommand cmd = new MySqlCommand("DELETE FROM Libros WHERE Id = @id;", conexion);
-            cmd.Parameters.AddWithValue("@id", idLibro);
+            using DbCommand cmd = ConexionBD.CrearComando("DELETE FROM Libros WHERE Id = @id;", conexion);
+            ConexionBD.AgregarParametro(cmd, "@id", idLibro);
             cmd.ExecuteNonQuery();
         }
 
@@ -257,7 +257,7 @@ namespace BiblioTech.Datos
         public List<Lector> ListarLectores(string filtroTexto = "", bool soloActivos = false)
         {
             List<Lector> lista = new List<Lector>();
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = @"
@@ -267,11 +267,11 @@ namespace BiblioTech.Datos
                   AND (@soloActivos = 0 OR Activo = 1)
                 ORDER BY NombreCompleto;";
 
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@texto", filtroTexto.Trim());
-            cmd.Parameters.AddWithValue("@soloActivos", soloActivos ? 1 : 0);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@texto", filtroTexto.Trim());
+            ConexionBD.AgregarParametro(cmd, "@soloActivos", soloActivos ? 1 : 0);
 
-            using MySqlDataReader reader = cmd.ExecuteReader();
+            using DbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 lista.Add(new Lector(
@@ -281,7 +281,7 @@ namespace BiblioTech.Datos
                     email: reader.GetString(3),
                     tipoLector: reader.GetString(4),
                     telefono: reader.GetString(5),
-                    activo: reader.GetInt32(6) == 1
+                    activo: Convert.ToInt32(reader.GetValue(6)) == 1
                 ));
             }
             return lista;
@@ -289,26 +289,26 @@ namespace BiblioTech.Datos
 
         public void InsertarLector(Lector lector)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = @"
                 INSERT INTO Lectores (NombreCompleto, Documento, Email, TipoLector, Telefono, Activo)
                 VALUES (@nombre, @documento, @email, @tipo, @telefono, @activo);";
 
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@nombre", lector.NombreCompleto.Trim());
-            cmd.Parameters.AddWithValue("@documento", lector.Documento.Trim());
-            cmd.Parameters.AddWithValue("@email", lector.Email.Trim());
-            cmd.Parameters.AddWithValue("@tipo", lector.TipoLector);
-            cmd.Parameters.AddWithValue("@telefono", lector.Telefono.Trim());
-            cmd.Parameters.AddWithValue("@activo", lector.Activo ? 1 : 0);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@nombre", lector.NombreCompleto.Trim());
+            ConexionBD.AgregarParametro(cmd, "@documento", lector.Documento.Trim());
+            ConexionBD.AgregarParametro(cmd, "@email", lector.Email.Trim());
+            ConexionBD.AgregarParametro(cmd, "@tipo", lector.TipoLector);
+            ConexionBD.AgregarParametro(cmd, "@telefono", lector.Telefono.Trim());
+            ConexionBD.AgregarParametro(cmd, "@activo", lector.Activo ? 1 : 0);
             cmd.ExecuteNonQuery();
         }
 
         public void ActualizarLector(Lector lector)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = @"
@@ -321,25 +321,25 @@ namespace BiblioTech.Datos
                     Activo = @activo
                 WHERE Id = @id;";
 
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@nombre", lector.NombreCompleto.Trim());
-            cmd.Parameters.AddWithValue("@documento", lector.Documento.Trim());
-            cmd.Parameters.AddWithValue("@email", lector.Email.Trim());
-            cmd.Parameters.AddWithValue("@tipo", lector.TipoLector);
-            cmd.Parameters.AddWithValue("@telefono", lector.Telefono.Trim());
-            cmd.Parameters.AddWithValue("@activo", lector.Activo ? 1 : 0);
-            cmd.Parameters.AddWithValue("@id", lector.Id);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@nombre", lector.NombreCompleto.Trim());
+            ConexionBD.AgregarParametro(cmd, "@documento", lector.Documento.Trim());
+            ConexionBD.AgregarParametro(cmd, "@email", lector.Email.Trim());
+            ConexionBD.AgregarParametro(cmd, "@tipo", lector.TipoLector);
+            ConexionBD.AgregarParametro(cmd, "@telefono", lector.Telefono.Trim());
+            ConexionBD.AgregarParametro(cmd, "@activo", lector.Activo ? 1 : 0);
+            ConexionBD.AgregarParametro(cmd, "@id", lector.Id);
             cmd.ExecuteNonQuery();
         }
 
         public void EliminarLector(int idLector)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
-            using (MySqlCommand cmdValidar = new MySqlCommand("SELECT COUNT(*) FROM Prestamos WHERE IdLector = @id;", conexion))
+            using (DbCommand cmdValidar = ConexionBD.CrearComando("SELECT COUNT(*) FROM Prestamos WHERE IdLector = @id;", conexion))
             {
-                cmdValidar.Parameters.AddWithValue("@id", idLector);
+                ConexionBD.AgregarParametro(cmdValidar, "@id", idLector);
                 long prestamos = Convert.ToInt64(cmdValidar.ExecuteScalar() ?? 0L);
                 if (prestamos > 0)
                 {
@@ -347,8 +347,8 @@ namespace BiblioTech.Datos
                 }
             }
 
-            using MySqlCommand cmd = new MySqlCommand("DELETE FROM Lectores WHERE Id = @id;", conexion);
-            cmd.Parameters.AddWithValue("@id", idLector);
+            using DbCommand cmd = ConexionBD.CrearComando("DELETE FROM Lectores WHERE Id = @id;", conexion);
+            ConexionBD.AgregarParametro(cmd, "@id", idLector);
             cmd.ExecuteNonQuery();
         }
     }

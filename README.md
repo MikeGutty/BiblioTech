@@ -1,6 +1,6 @@
 # BiblioTech - Sistema de Gestión Bibliotecaria
 
-Aplicación de escritorio desarrollada en **C# (.NET 10 / Windows Forms)** con base de datos **MySQL**, estructurada en 3 capas (`Modelos`, `Datos` y `Formularios`) aplicando Programación Orientada a Objetos.
+Aplicación de escritorio desarrollada en **C# (.NET 10 / Windows Forms)** con soporte para bases de datos **MySQL** y **SQL Server**, estructurada en 3 capas (`Modelos`, `Datos` y `Formularios`) aplicando Programación Orientada a Objetos y polimorfismo en ADO.NET (`System.Data.Common`).
 
 ## Funcionalidades Principales
 
@@ -26,16 +26,37 @@ Aplicación de escritorio desarrollada en **C# (.NET 10 / Windows Forms)** con b
 ## Estructura del Proyecto
 
 - `Modelos/`: Clases de dominio (`Persona`, `UsuarioSistema`, `Lector`, `Libro`, `Autor`, `Categoria`, `Prestamo`, `ConfiguracionSistema`).
-- `Datos/`: Conexión y consultas SQL con `MySqlConnector` (`ConexionBD`, `UsuarioDatos`, `CatalogoDatos`, `PrestamoDatos`, `ConfiguracionDatos`).
+- `Datos/`: Conexión y consultas SQL compatibles con MySQL y SQL Server (`ConexionBD`, `UsuarioDatos`, `CatalogoDatos`, `PrestamoDatos`, `ConfiguracionDatos`).
 - `Formularios/`: Interfaz gráfica en Windows Forms (`FrmLogin`, `FrmPrincipal`, `FrmLibros`, `FrmCategoriasAutores`, `FrmLectores`, `FrmPrestamos`, `FrmAdministracion`).
 
-## Configuración de la Base de Datos
+## Configuración de la Base de Datos (MySQL o SQL Server)
 
-Al iniciar la aplicación, `ConexionBD.InicializarBaseDeDatos()` verifica que exista el esquema `bibliotech`, crea las tablas si no existen y carga datos de prueba iniciales.
+Al iniciar la aplicación, `ConexionBD.InicializarBaseDeDatos()` verifica que exista la base de datos `bibliotech`, crea las tablas automáticamente según el motor elegido y carga datos de prueba iniciales.
 
-Para conectar a la instancia configurada en `ConexionBD.cs`:
-1. Crear un archivo `db.secret.txt` en la raíz del proyecto con la contraseña de MySQL.
-2. Si se prefiere trabajar con un servidor MySQL local (por ejemplo XAMPP o MySQL Workbench), modificar los parámetros en `BiblioTech/Datos/ConexionBD.cs` (`Servidor = "localhost"`, `Puerto = "3306"`, `Usuario = "root"`, `Contrasena = ""`) y quitar `SslMode=Required;` de la cadena de conexión.
+Para elegir qué motor de base de datos utilizar, abra el archivo `BiblioTech/Datos/ConexionBD.cs` y modifique la propiedad `MotorActual`:
+
+```csharp
+// Para usar MySQL:
+public static MotorBD MotorActual { get; set; } = MotorBD.MySQL;
+
+// Para usar SQL Server:
+public static MotorBD MotorActual { get; set; } = MotorBD.SqlServer;
+```
+
+### Opción A: Trabajar con SQL Server
+En `BiblioTech/Datos/ConexionBD.cs` puede ajustar los parámetros en la sección **3. PARÁMETROS PARA SQL SERVER**:
+- **Autenticación de Windows (por defecto)**:
+  - `ServidorSqlServer = "localhost"` (o `@"localhost\SQLEXPRESS"`, `"."`, según su instancia).
+  - `AutenticacionWindowsSqlServer = true` (Windows Authentication).
+  - `ConfiarCertificadoSqlServer = true` (Trust Server Certificate).
+- **Autenticación de SQL Server (Usuario y Contraseña)**:
+  - Cambie `AutenticacionWindowsSqlServer = false` y configure `UsuarioSqlServer` (ej. `"sa"`) y `ContrasenaSqlServer`.
+
+### Opción B: Trabajar con MySQL
+En `BiblioTech/Datos/ConexionBD.cs` puede ajustar los parámetros en la sección **2. PARÁMETROS PARA MYSQL**:
+1. Para conectar a la instancia en la nube configurada por defecto, asegúrese de tener el archivo `db.secret.txt` con la contraseña de MySQL y `UsarSslMySql = true`.
+2. Si prefiere trabajar con un servidor MySQL local (por ejemplo XAMPP o MySQL Workbench), modifique:
+   - `Servidor = "localhost"`, `Puerto = "3306"`, `Usuario = "root"`, `Contrasena = ""` y `UsarSslMySql = false`.
 
 ## Usuarios de Prueba
 
@@ -47,4 +68,6 @@ Para conectar a la instancia configurada en `ConexionBD.cs`:
 ## Requisitos
 
 - Visual Studio 2022 / 2026 o .NET SDK 10.0 en Windows.
-- Paquete NuGet `MySqlConnector` (2.5.0).
+- Paquetes NuGet:
+  - `MySqlConnector` (2.5.0)
+  - `Microsoft.Data.SqlClient` (6.0.1)

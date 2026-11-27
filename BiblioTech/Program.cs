@@ -17,10 +17,10 @@ namespace BiblioTech
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"No se pudo conectar al servidor MySQL ({ConexionBD.Servidor}:{ConexionBD.Puerto}).\n\n" +
-                    "Verifique que el servicio MySQL esté activo y revise los parámetros en ConexionBD.cs.\n\n" +
+                    $"No se pudo conectar al servidor {ConexionBD.ObtenerResumenDestino()}.\n\n" +
+                    "Verifique que el servicio de base de datos esté activo y revise los parámetros en ConexionBD.cs.\n\n" +
                     $"Detalle: {ex.Message}",
-                    "Error de Conexión a MySQL",
+                    $"Error de Conexión a {ConexionBD.MotorActual}",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return;

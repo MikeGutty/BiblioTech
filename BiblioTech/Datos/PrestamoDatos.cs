@@ -1,5 +1,5 @@
+using System.Data.Common;
 using BiblioTech.Modelos;
-using MySqlConnector;
 
 namespace BiblioTech.Datos
 {
@@ -8,7 +8,7 @@ namespace BiblioTech.Datos
         public List<Prestamo> ListarPrestamos(string filtroTexto = "", string filtroEstado = "Todos")
         {
             List<Prestamo> lista = new List<Prestamo>();
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = @"
@@ -27,10 +27,10 @@ namespace BiblioTech.Datos
                                    OR Lec.Documento LIKE CONCAT('%', @texto, '%'))
                 ORDER BY P.Id DESC;";
 
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@texto", filtroTexto.Trim());
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@texto", filtroTexto.Trim());
 
-            using MySqlDataReader reader = cmd.ExecuteReader();
+            using DbDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 Prestamo p = new Prestamo
@@ -68,29 +68,29 @@ namespace BiblioTech.Datos
 
         public int ContarPrestamosActivosPorLector(int idLector)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = "SELECT COUNT(*) FROM Prestamos WHERE IdLector = @idLector AND Estado = 'Activo';";
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@idLector", idLector);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@idLector", idLector);
             return Convert.ToInt32(cmd.ExecuteScalar() ?? 0);
         }
 
         // Registra el préstamo y descuenta el stock del libro dentro de una misma transacción
         public void RegistrarPrestamo(Prestamo nuevoPrestamo)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
-            using MySqlTransaction transaccion = conexion.BeginTransaction();
+            using DbTransaction transaccion = conexion.BeginTransaction();
 
             try
             {
                 // Verificar stock disponible
                 string sqlStock = "SELECT StockDisponible FROM Libros WHERE Id = @idLibro;";
-                using (MySqlCommand cmdStock = new MySqlCommand(sqlStock, conexion, transaccion))
+                using (DbCommand cmdStock = ConexionBD.CrearComando(sqlStock, conexion, transaccion))
                 {
-                    cmdStock.Parameters.AddWithValue("@idLibro", nuevoPrestamo.IdLibro);
+                    ConexionBD.AgregarParametro(cmdStock, "@idLibro", nuevoPrestamo.IdLibro);
                     int disponible = Convert.ToInt32(cmdStock.ExecuteScalar() ?? 0);
                     if (disponible <= 0)
                     {
@@ -103,22 +103,22 @@ namespace BiblioTech.Datos
                     INSERT INTO Prestamos (IdLibro, IdLector, IdUsuarioRegistro, FechaPrestamo, FechaDevolucionEsperada, FechaDevolucionReal, Estado, MultaPagada, Observaciones)
                     VALUES (@idLibro, @idLector, @idUsuario, @fechaPrestamo, @fechaEsperada, NULL, 'Activo', 0, @obs);";
 
-                using (MySqlCommand cmdInsert = new MySqlCommand(sqlInsert, conexion, transaccion))
+                using (DbCommand cmdInsert = ConexionBD.CrearComando(sqlInsert, conexion, transaccion))
                 {
-                    cmdInsert.Parameters.AddWithValue("@idLibro", nuevoPrestamo.IdLibro);
-                    cmdInsert.Parameters.AddWithValue("@idLector", nuevoPrestamo.IdLector);
-                    cmdInsert.Parameters.AddWithValue("@idUsuario", nuevoPrestamo.IdUsuarioRegistro);
-                    cmdInsert.Parameters.AddWithValue("@fechaPrestamo", nuevoPrestamo.FechaPrestamo.ToString("yyyy-MM-dd"));
-                    cmdInsert.Parameters.AddWithValue("@fechaEsperada", nuevoPrestamo.FechaDevolucionEsperada.ToString("yyyy-MM-dd"));
-                    cmdInsert.Parameters.AddWithValue("@obs", nuevoPrestamo.Observaciones.Trim());
+                    ConexionBD.AgregarParametro(cmdInsert, "@idLibro", nuevoPrestamo.IdLibro);
+                    ConexionBD.AgregarParametro(cmdInsert, "@idLector", nuevoPrestamo.IdLector);
+                    ConexionBD.AgregarParametro(cmdInsert, "@idUsuario", nuevoPrestamo.IdUsuarioRegistro);
+                    ConexionBD.AgregarParametro(cmdInsert, "@fechaPrestamo", nuevoPrestamo.FechaPrestamo.ToString("yyyy-MM-dd"));
+                    ConexionBD.AgregarParametro(cmdInsert, "@fechaEsperada", nuevoPrestamo.FechaDevolucionEsperada.ToString("yyyy-MM-dd"));
+                    ConexionBD.AgregarParametro(cmdInsert, "@obs", nuevoPrestamo.Observaciones.Trim());
                     cmdInsert.ExecuteNonQuery();
                 }
 
                 // Descontar 1 al stock disponible
                 string sqlUpdateLibro = "UPDATE Libros SET StockDisponible = StockDisponible - 1 WHERE Id = @idLibro;";
-                using (MySqlCommand cmdUpdate = new MySqlCommand(sqlUpdateLibro, conexion, transaccion))
+                using (DbCommand cmdUpdate = ConexionBD.CrearComando(sqlUpdateLibro, conexion, transaccion))
                 {
-                    cmdUpdate.Parameters.AddWithValue("@idLibro", nuevoPrestamo.IdLibro);
+                    ConexionBD.AgregarParametro(cmdUpdate, "@idLibro", nuevoPrestamo.IdLibro);
                     cmdUpdate.ExecuteNonQuery();
                 }
 
@@ -134,9 +134,9 @@ namespace BiblioTech.Datos
         // Registra la devolución y repone el stock del ejemplar
         public void RegistrarDevolucion(int idPrestamo, int idLibro, decimal multaPagada, string observaciones)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
-            using MySqlTransaction transaccion = conexion.BeginTransaction();
+            using DbTransaction transaccion = conexion.BeginTransaction();
 
             try
             {
@@ -148,12 +148,12 @@ namespace BiblioTech.Datos
                         Observaciones = @obs
                     WHERE Id = @idPrestamo AND Estado = 'Activo';";
 
-                using (MySqlCommand cmdPrestamo = new MySqlCommand(sqlUpdatePrestamo, conexion, transaccion))
+                using (DbCommand cmdPrestamo = ConexionBD.CrearComando(sqlUpdatePrestamo, conexion, transaccion))
                 {
-                    cmdPrestamo.Parameters.AddWithValue("@fechaReal", DateTime.Today.ToString("yyyy-MM-dd"));
-                    cmdPrestamo.Parameters.AddWithValue("@multa", multaPagada);
-                    cmdPrestamo.Parameters.AddWithValue("@obs", observaciones.Trim());
-                    cmdPrestamo.Parameters.AddWithValue("@idPrestamo", idPrestamo);
+                    ConexionBD.AgregarParametro(cmdPrestamo, "@fechaReal", DateTime.Today.ToString("yyyy-MM-dd"));
+                    ConexionBD.AgregarParametro(cmdPrestamo, "@multa", multaPagada);
+                    ConexionBD.AgregarParametro(cmdPrestamo, "@obs", observaciones.Trim());
+                    ConexionBD.AgregarParametro(cmdPrestamo, "@idPrestamo", idPrestamo);
                     int filas = cmdPrestamo.ExecuteNonQuery();
 
                     if (filas == 0)
@@ -168,9 +168,9 @@ namespace BiblioTech.Datos
                     SET StockDisponible = CASE WHEN StockDisponible < StockTotal THEN StockDisponible + 1 ELSE StockTotal END
                     WHERE Id = @idLibro;";
 
-                using (MySqlCommand cmdLibro = new MySqlCommand(sqlReponeStock, conexion, transaccion))
+                using (DbCommand cmdLibro = ConexionBD.CrearComando(sqlReponeStock, conexion, transaccion))
                 {
-                    cmdLibro.Parameters.AddWithValue("@idLibro", idLibro);
+                    ConexionBD.AgregarParametro(cmdLibro, "@idLibro", idLibro);
                     cmdLibro.ExecuteNonQuery();
                 }
 
@@ -185,11 +185,14 @@ namespace BiblioTech.Datos
 
         public (int TotalTitulos, int EjemplaresDisponibles, int PrestamosActivos, int PrestamosVencidos) ObtenerIndicadoresDashboard()
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
-            int totalTitulos = Convert.ToInt32(new MySqlCommand("SELECT COUNT(*) FROM Libros;", conexion).ExecuteScalar() ?? 0);
-            int ejemplaresDisp = Convert.ToInt32(new MySqlCommand("SELECT IFNULL(SUM(StockDisponible), 0) FROM Libros;", conexion).ExecuteScalar() ?? 0);
+            using DbCommand cmdTitulos = ConexionBD.CrearComando("SELECT COUNT(*) FROM Libros;", conexion);
+            int totalTitulos = Convert.ToInt32(cmdTitulos.ExecuteScalar() ?? 0);
+
+            using DbCommand cmdDisponibles = ConexionBD.CrearComando("SELECT COALESCE(SUM(StockDisponible), 0) FROM Libros;", conexion);
+            int ejemplaresDisp = Convert.ToInt32(cmdDisponibles.ExecuteScalar() ?? 0);
 
             List<Prestamo> activos = ListarPrestamos("", "Activos");
             int totalActivos = activos.Count;

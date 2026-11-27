@@ -1,5 +1,5 @@
+using System.Data.Common;
 using BiblioTech.Modelos;
-using MySqlConnector;
 
 namespace BiblioTech.Datos
 {
@@ -9,12 +9,12 @@ namespace BiblioTech.Datos
         {
             ConfiguracionSistema config = new ConfiguracionSistema();
 
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = "SELECT NombreBiblioteca, DiasMaximoPrestamo, MultaPorDiaRetraso FROM Configuracion WHERE Id = 1;";
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            using MySqlDataReader reader = cmd.ExecuteReader();
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            using DbDataReader reader = cmd.ExecuteReader();
 
             if (reader.Read())
             {
@@ -28,7 +28,7 @@ namespace BiblioTech.Datos
 
         public void GuardarConfiguracion(ConfiguracionSistema config)
         {
-            using MySqlConnection conexion = ConexionBD.ObtenerConexion();
+            using DbConnection conexion = ConexionBD.ObtenerConexion();
             conexion.Open();
 
             string sql = @"
@@ -38,10 +38,10 @@ namespace BiblioTech.Datos
                     MultaPorDiaRetraso = @multa
                 WHERE Id = 1;";
 
-            using MySqlCommand cmd = new MySqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@nombre", config.NombreBiblioteca);
-            cmd.Parameters.AddWithValue("@dias", config.DiasMaximoPrestamo);
-            cmd.Parameters.AddWithValue("@multa", config.MultaPorDiaRetraso);
+            using DbCommand cmd = ConexionBD.CrearComando(sql, conexion);
+            ConexionBD.AgregarParametro(cmd, "@nombre", config.NombreBiblioteca);
+            ConexionBD.AgregarParametro(cmd, "@dias", config.DiasMaximoPrestamo);
+            ConexionBD.AgregarParametro(cmd, "@multa", config.MultaPorDiaRetraso);
             cmd.ExecuteNonQuery();
         }
     }
